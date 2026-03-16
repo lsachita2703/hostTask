@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Modern Task Board</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,Arial}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+  color:white;
+  padding:40px;
+}
+
+.app{
+  max-width:1000px;
+  margin:auto;
+}
+
+.header{
+  margin-bottom:30px;
+}
+
+.header h1{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.header p{
+  color:#94a3b8;
+}
+
+.container{
+  width:100%;
+  min-height:420px;
+  background:white;
+  color:black;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 30px 60px rgba(0,0,0,0.45);
+}
+
+.input-row{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+input{
+  flex:1;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:15px;
+}
+
+button{
+  padding:14px 20px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+  font-size:14px;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.task-list{
+  margin-top:10px;
+}
+
+.task{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f1f5f9;
+  padding:14px;
+  border-radius:12px;
+  margin-top:10px;
+  animation:fade .25s ease;
+  font-size:15px;
+}
+
+.delete{
+  background:#ef4444;
+  font-size:12px;
+  padding:8px 12px;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  font-size:14px;
+  margin-top:20px;
+}
+
+.footer{
+  margin-top:25px;
+  text-align:center;
+  color:#94a3b8;
+  font-size:13px;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>Task Dashboard</h1>
+    <p>A simple one-page productivity app</p>
+  </div>
+
+  <div class="container">
+
+    <div class="input-row">
+      <input id="taskInput" placeholder="Add a new task..." />
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <div id="taskList" class="task-list"></div>
+
+    <div class="empty" id="emptyMsg">No tasks yet</div>
+
+  </div>
+
+  
+
+</div>
+
+<script>
+const input = document.getElementById("taskInput")
+const list = document.getElementById("taskList")
+const empty = document.getElementById("emptyMsg")
+
+let tasks = []
+
+function render(){
+  list.innerHTML = ""
+
+  if(tasks.length===0){
+    empty.style.display="block"
+  } else {
+    empty.style.display="none"
+  }
+
+  tasks.forEach((task,index)=>{
+    const div=document.createElement("div")
+    div.className="task"
+
+    div.innerHTML=`
+      <span>${task}</span>
+      <button class="delete" onclick="removeTask(${index})">Delete</button>
+    `
+
+    list.appendChild(div)
+  })
+}
+
+function addTask(){
+  const text=input.value.trim()
+  if(!text) return
+
+  tasks.push(text)
+  input.value=""
+  render()
+}
+
+function removeTask(i){
+  tasks.splice(i,1)
+  render()
+}
+
+input.addEventListener("keypress",e=>{
+  if(e.key==="Enter") addTask()
+})
+</script>
+
+</body>
+</html>
